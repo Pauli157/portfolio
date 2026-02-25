@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Pauli Saari — UX-portfolio</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600&display=swap");
+
+      :root {
+        --bg: #f6f4ef;
+        --section-base: #fdfbf7;
+        --section-alt: #f1ede6;
+        --ink: #1f1f1f;
+        --muted: #5b5b5b;
+        --line: #e2ddd4;
+        --accent: #0f6b5f;
+        --accent-soft: #eef3f1;
+        --max-width: 1100px;
+        --text-width: 700px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Work Sans", "Helvetica Neue", sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        line-height: 1.75;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Space Grotesk", "Helvetica Neue", sans-serif;
+        margin: 0 0 12px;
+        letter-spacing: -0.01em;
+      }
+
+      h1 {
+        font-size: clamp(2.4rem, 4vw, 3.4rem);
+      }
+
+      h2 {
+        font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+      }
+
+      h3 {
+        font-size: 1.2rem;
+      }
+
+      p {
+        margin: 0 0 16px;
+      }
+
+      .page {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 24px 22px 120px;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        padding: 18px 0;
+        background: var(--bg);
+        border-bottom: 1px solid rgba(217, 214, 209, 0.6);
+        box-shadow: 0 8px 18px rgba(31, 31, 31, 0.04);
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+      }
+
+      .topbar-inner {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .brand {
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: 0.9rem;
+      }
+
+      .nav {
+        display: flex;
+        gap: 18px;
+        font-weight: 500;
+      }
+
+      .nav a {
+        text-decoration: none;
+        color: var(--ink);
+        padding: 6px 4px;
+        position: relative;
+      }
+
+      .nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -2px;
+        height: 2px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.25s ease;
+      }
+
+      .nav a:hover::after,
+      .nav a[aria-current="page"]::after {
+        transform: scaleX(1);
+      }
+
+      .section {
+        padding: 72px 0;
+        border-bottom: 1px solid var(--line);
+        scroll-margin-top: 110px;
+        position: relative;
+        z-index: 0;
+      }
+
+      .section + .section {
+        margin-top: 16px;
+      }
+
+      .topbar + .section {
+        margin-top: 16px;
+      }
+
+      #projekt {
+        scroll-margin-top: 140px;
+      }
+
+      .section:last-of-type {
+        border-bottom: none;
+      }
+
+      .section::before {
+        content: "";
+        position: absolute;
+        left: -22px;
+        right: -22px;
+        top: 0;
+        bottom: 0;
+        background: var(--section-base);
+        border-radius: 26px;
+        z-index: -1;
+        pointer-events: none;
+      }
+
+      .section.alt::before {
+        background: var(--section-alt);
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 48px;
+        align-items: center;
+      }
+
+      .hero-text {
+        max-width: 560px;
+      }
+
+      .hero-role {
+        color: var(--muted);
+        font-weight: 500;
+        margin-bottom: 18px;
+      }
+
+      .hero-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 22px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+      }
+
+      .hero {
+        position: relative;
+      }
+
+      .scroll-indicator {
+        position: absolute;
+        left: 50%;
+        bottom: 12px;
+        transform: translateX(-50%);
+        width: 36px;
+        height: 36px;
+        border-radius: 999px;
+        border: 1px solid rgba(15, 107, 95, 0.2);
+        display: grid;
+        place-items: center;
+        color: var(--accent);
+        opacity: 0.7;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(6px);
+        animation: floatDown 2.6s ease-in-out infinite;
+      }
+
+      .scroll-indicator svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      @keyframes floatDown {
+        0%,
+        100% {
+          transform: translate(-50%, 0);
+        }
+        50% {
+          transform: translate(-50%, 6px);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .scroll-indicator {
+          animation: none;
+        }
+      }
+
+      .button-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 24px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 20px;
+        border-radius: 999px;
+        font-weight: 600;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        background: #ffffff;
+        color: var(--ink);
+      }
+
+      .btn.primary {
+        background: var(--accent);
+        color: #ffffff;
+        border-color: var(--accent);
+      }
+
+      .btn.secondary {
+        background: transparent;
+      }
+
+      .btn:focus-visible {
+        outline: 3px solid rgba(15, 107, 95, 0.35);
+        outline-offset: 3px;
+      }
+
+      .btn.disabled {
+        opacity: 0.5;
+        cursor: default;
+      }
+
+      .section-intro {
+        max-width: var(--text-width);
+        color: var(--muted);
+      }
+
+      .project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
+        margin-top: 28px;
+      }
+
+      .project-card {
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      a.project-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 18px 32px rgba(31, 31, 31, 0.12);
+      }
+
+      a.project-card:focus-visible {
+        outline: 3px solid rgba(15, 107, 95, 0.35);
+        outline-offset: 4px;
+      }
+
+      .project-card.is-disabled {
+        cursor: default;
+      }
+
+      .card-thumb {
+        position: relative;
+        aspect-ratio: 16 / 9;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        box-shadow: 0 10px 20px rgba(31, 31, 31, 0.08);
+        background: #f4f2ee;
+      }
+
+      .card-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .project-card.is-disabled .card-thumb {
+        box-shadow: none;
+      }
+
+      .card {
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .card p {
+        margin: 0;
+      }
+
+      .tag-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+      }
+
+      .tag {
+        font-size: 0.8rem;
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: rgba(15, 107, 95, 0.12);
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .card-actions {
+        margin-top: auto;
+        padding-top: 12px;
+      }
+
+      .project-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .project-title .title {
+        margin: 0;
+      }
+
+      .project-title .arrow {
+        font-weight: 600;
+        color: var(--accent);
+        font-size: 1.1rem;
+      }
+
+      a.project-card .title {
+        display: inline-flex;
+        align-items: center;
+        position: relative;
+      }
+
+      a.project-card .title::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        width: 100%;
+        height: 2px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.2s ease;
+      }
+
+      a.project-card:hover .title::after,
+      a.project-card:focus-visible .title::after {
+        transform: scaleX(1);
+      }
+
+      .project-title .status {
+        font-size: 0.85rem;
+        color: var(--muted);
+        border: 1px solid var(--line);
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: #ffffff;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      .about-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 36px;
+      }
+
+      .strength-grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      }
+
+      .strength-card {
+        padding: 16px;
+      }
+
+      .split-blocks {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 24px;
+        margin-top: 24px;
+      }
+
+      .split-block {
+        padding: 20px;
+      }
+
+      .surface {
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: 0 12px 24px rgba(31, 31, 31, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .surface::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--accent);
+        opacity: 0.6;
+        border-radius: 18px 0 0 18px;
+      }
+
+      .project-card.surface::before {
+        display: none;
+      }
+
+      .contact-panel.surface::before {
+        display: none;
+      }
+
+      .pull-quote {
+        margin: 24px 0;
+        padding-left: 16px;
+        border-left: 3px solid var(--accent);
+        font-size: 1.1rem;
+        font-style: italic;
+        color: var(--ink);
+        max-width: 540px;
+      }
+
+      .contact-actions {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        justify-content: center;
+      }
+
+      .contact-panel {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 28px;
+        text-align: center;
+      }
+
+      @media (max-width: 720px) {
+        .nav {
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .section {
+          padding: 56px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div class="brand">Pauli Saari</div>
+          <nav class="nav" aria-label="Huvudmeny">
+            <a href="#top" aria-current="page">Hem</a>
+            <a href="#projekt">Projekt</a>
+            <a href="#om-mig">Om mig</a>
+            <a href="#kontakt">Kontakt</a>
+          </nav>
+        </div>
+      </header>
+
+      <section class="section base hero" id="top">
+        <div class="hero-text">
+          <h1>Pauli Saari</h1>
+          <p class="hero-role">UX-designstudent – fokus på UX research & tjänstedesign</p>
+          <p>
+            Jag är UX-designstudent med fokus på kvalitativ UX research,
+            analys/syntes, idégenerering och tjänstedesign. Jag trivs i
+            gränslandet mellan människor och beslut – där man behöver förstå
+            behov på djupet och omsätta dem i tydliga prioriteringar och nästa
+            steg.
+          </p>
+          <div class="button-row">
+            <a class="btn primary" href="#projekt">Se projekt</a>
+            <a class="btn secondary" href="#kontakt">Kontakta mig</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <img src="1.png" alt="Porträttbild på Pauli Saari" />
+        </div>
+        <div class="scroll-indicator" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M6 9l6 6 6-6"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </div>
+      </section>
+
+      <section class="section base" id="projekt">
+        <h2>Projekt</h2>
+        <p class="section-intro">
+          Korta case med fokus på research, analys/syntes och tjänstedesign.
+        </p>
+        <div class="project-grid">
+          <a
+            class="card surface project-card"
+            href="tassvakt.html"
+            aria-label="Öppna case: TASSVAKT"
+          >
+            <div class="card-thumb">
+              <img
+                src="assets/images/tassvakt-thumb.png"
+                alt="Thumbnail från TASSVAKT-projektet"
+              />
+            </div>
+            <div class="project-title">
+              <h3 class="title">TASSVAKT</h3>
+              <span class="arrow" aria-hidden="true">→</span>
+            </div>
+            <p>
+              Trygg hundpassning som tjänst – fokus på tillit, matchning och
+              tjänstedesign.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Research</span>
+              <span class="tag">Syntes</span>
+              <span class="tag">Service design</span>
+              <span class="tag">Testing</span>
+            </div>
+          </a>
+          <div class="card surface project-card is-disabled">
+            <div class="card-thumb">
+              <img src="assets/images/momo-thumb.png" alt="MoMo – case kommer snart" />
+            </div>
+            <div class="project-title">
+              <h3 class="title">MoMo</h3>
+              <span class="status">Kommer snart</span>
+            </div>
+            <p>
+              AI-coaching för vardagsstöd, baserad på tre användartyper: Coper,
+              Organizer och Optimizer.
+            </p>
+            <div class="tag-row">
+              <span class="tag">Research</span>
+              <span class="tag">Syntes</span>
+              <span class="tag">Service design</span>
+              <span class="tag">Testing</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="om-mig">
+        <h2>Om mig</h2>
+        <div class="about-grid">
+          <div>
+            <p>
+              Jag drivs av att förstå vad som faktiskt ligger bakom ett problem –
+              och att ta reda på vad som är viktigast för användare i verkliga
+              situationer – särskilt när lösningen behöver fungera i ett större
+              sammanhang än bara i en skärm. Jag söker LIA med tyngdpunkt på UX
+              research och tjänstedesign, där jag får arbeta med verkliga problem
+              – gärna tillsammans med team med kompletterande kompetenser.
+            </p>
+            <blockquote class="pull-quote">
+              “Jag trivs i gränslandet mellan människor och beslut – där man
+              behöver förstå behov på djupet och omsätta dem i tydliga
+              prioriteringar och nästa steg.”
+            </blockquote>
+            <p>
+              Min styrka ligger i kombinationen av människoförståelse och
+              analytisk skärpa: jag gillar att möta användare, ställa bra
+              följdfrågor och fånga det väsentliga i stunden – och sedan
+              strukturera materialet så att det leder till tydliga insikter och
+              beslut.
+            </p>
+            <p>
+              Ett exempel på när min analys gjorde skillnad var i ett projekt om
+              en AI-coaching-app. Intervjuerna visade att den största
+              användargruppen främst behövde stöd och trygghet snarare än ett
+              strikt målfokus. Det påverkade vår riktning: vi designade en
+              lösning med flera lägen i chatten, där ett läge var mer coachande
+              och lösningsorienterat, medan ett annat var mer empatiskt och
+              lyssnande – som ett steg innan man går in i problemlösning.
+            </p>
+          </div>
+          <div>
+            <h3>Det här är mina styrkor</h3>
+            <div class="strength-grid">
+              <div class="strength-card surface">
+                <h4>Kvalitativ research & intervjuarbete</h4>
+                <p>
+                  Jag genomför intervjuer med fokus på öppna frågor, följdfrågor
+                  och trygghet i samtalet.
+                </p>
+              </div>
+              <div class="strength-card surface">
+                <h4>Analys & syntes</h4>
+                <p>
+                  Jag är stark i att strukturera kvalitativ data, se mönster och
+                  koka ner komplex information till en tydlig kärna.
+                </p>
+              </div>
+              <div class="strength-card surface">
+                <h4>Facilitering & samskapande</h4>
+                <p>
+                  Jag gillar att hålla workshops och möten som skapar fokus,
+                  delaktighet och framdrift.
+                </p>
+              </div>
+              <div class="strength-card surface">
+                <h4>Validering & iteration</h4>
+                <p>
+                  Jag använder användartester för att testa hypoteser och iterera
+                  baserat på observationer och friktion.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="split-blocks">
+          <div class="split-block surface">
+            <h3>Så jobbar jag i team</h3>
+            <p>
+              Jag hjälper gruppen att hålla fokus och röd tråd när arbetet
+              riskerar att spreta.
+            </p>
+            <p>
+              Jag tar ofta en naturlig facilitatorroll och hjälper teamet att
+              landa i tydliga frågeställningar, prioriteringar och nästa steg.
+            </p>
+            <p>
+              Jag uppskattar samarbeten där människor tar ansvar, kommunicerar
+              tydligt och håller sig till saken – gärna med humor och värme.
+            </p>
+            <p>
+              Vid olika åsikter är jag flexibel i det som inte är centralt, och
+              tydlig kring det som är viktigt.
+            </p>
+          </div>
+          <div class="split-block surface">
+            <h3>Utanför UX</h3>
+            <p>
+              Jag är genuint intresserad av människor, kommunikation och
+              personlig utveckling. Jag får också energi av kreativa uttryck –
+              jag dansar pardans och spelar gitarr/sjunger – och jag lär mig
+              gärna nya saker genom att läsa och lyssna på poddar.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section base" id="kontakt">
+        <div class="contact-panel surface">
+          <h2>Kontakt</h2>
+          <p>Hör gärna av dig om LIA eller för samtal om UX research och tjänstedesign.</p>
+          <p>Kontaktuppgifter finns i min ansökan. Det går också bra att kontakta mig via LinkedIn.</p>
+          <div class="contact-actions">
+            <a
+              class="btn"
+              href="https://www.linkedin.com/in/pauli-saari-3a08694/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>

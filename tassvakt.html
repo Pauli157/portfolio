@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tassvakt — UX-research portfolioprojekt</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Work+Sans:wght@300;400;500;600&display=swap");
+
+      :root {
+        --bg: #f6f4ef;
+        --ink: #1f1f1f;
+        --muted: #5b5b5b;
+        --line: #e2ddd4;
+        --accent: #0f6b5f;
+        --max-width: 1100px;
+        --text-width: 700px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Work Sans", "Helvetica Neue", sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        line-height: 1.7;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-family: "Space Grotesk", "Helvetica Neue", sans-serif;
+        margin: 0 0 12px;
+        letter-spacing: -0.01em;
+      }
+
+      h1 {
+        font-size: clamp(2.6rem, 5vw, 4.6rem);
+        text-transform: uppercase;
+      }
+
+      h2 {
+        font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+      }
+
+      p {
+        margin: 0 0 16px;
+        color: var(--ink);
+      }
+
+      ul {
+        margin: 0 0 18px;
+        padding-left: 18px;
+      }
+
+      li {
+        margin-bottom: 6px;
+      }
+
+      .page {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 36px 22px 120px;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        padding: 18px 0;
+        background: var(--bg);
+        border-bottom: 1px solid rgba(217, 214, 209, 0.6);
+        box-shadow: 0 8px 18px rgba(31, 31, 31, 0.04);
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        margin-right: calc(50% - 50vw);
+      }
+
+      .topbar-inner {
+        max-width: var(--max-width);
+        margin: 0 auto;
+        padding: 0 22px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .brand {
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+        font-size: 0.9rem;
+      }
+
+      .nav {
+        display: flex;
+        gap: 18px;
+        font-weight: 500;
+      }
+
+      .nav a {
+        text-decoration: none;
+        color: var(--ink);
+        padding: 6px 4px;
+        position: relative;
+      }
+
+      .nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -2px;
+        height: 2px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.25s ease;
+      }
+
+      .nav a:hover::after,
+      .nav a[aria-current="page"]::after {
+        transform: scaleX(1);
+      }
+
+      .section {
+        padding: 68px 0;
+        border-bottom: 1px solid var(--line);
+        opacity: 0;
+        animation: fadeUp 0.7s ease forwards;
+        animation-delay: var(--delay, 0s);
+        scroll-margin-top: 110px;
+      }
+
+      .section + .section {
+        margin-top: 16px;
+      }
+
+      .topbar + .section {
+        margin-top: 16px;
+      }
+
+      .section:last-of-type {
+        border-bottom: none;
+      }
+
+      .text-block {
+        max-width: var(--text-width);
+      }
+
+      .kicker {
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        color: var(--muted);
+        font-size: 0.85rem;
+        margin-bottom: 16px;
+      }
+
+      .lead {
+        font-size: 1.05rem;
+      }
+
+      .meta {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 14px;
+        margin-top: 24px;
+      }
+
+      .meta + p {
+        margin-top: 24px;
+      }
+
+      .meta div {
+        padding: 12px 14px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: #fffdf9;
+      }
+
+      .image-block {
+        margin-top: 28px;
+      }
+
+      .image-block img {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+      }
+
+      .image-block.primary img {
+        max-width: 100%;
+      }
+
+      .image-block.narrow img {
+        max-width: 80%;
+      }
+
+      .image-block.supporting img {
+        max-width: 60%;
+      }
+
+      .image-block.thumb img {
+        max-width: 40%;
+      }
+
+      .image-block.align-right img {
+        margin-left: auto;
+      }
+
+      .image-block.align-center img {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .image-block.align-left img {
+        margin-right: auto;
+      }
+
+      .caption {
+        margin-top: 10px;
+        font-size: 0.85rem;
+        color: var(--muted);
+      }
+
+      .caption.top {
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+
+      .thumb-grid {
+        margin-top: 28px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        gap: 16px;
+      }
+
+      .thumb-grid a {
+        display: block;
+        text-decoration: none;
+        color: inherit;
+      }
+
+      .thumb-grid img {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        background: #ffffff;
+      }
+
+      .muted {
+        color: var(--muted);
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 720px) {
+        .nav {
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+
+        .section {
+          padding: 52px 0;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .section {
+          animation: none;
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="topbar-inner">
+          <div class="brand">Pauli Saari</div>
+          <nav class="nav" aria-label="Huvudmeny">
+            <a href="index.html#top">Hem</a>
+            <a href="index.html#projekt">Projekt</a>
+            <a href="index.html#om-mig">Om mig</a>
+            <a href="index.html#kontakt">Kontakt</a>
+          </nav>
+        </div>
+      </header>
+
+      <section class="section" style="--delay: 0.05s">
+        <div class="text-block">
+          <div class="kicker">UX research & tjänstedesign — portfolio case</div>
+          <h1>TASSVAKT</h1>
+          <p class="lead">
+            Detta projekt genomfördes inom ramen för en UX-designutbildning och
+            fokuserade på att utforska hur trygg hundpassning kan designas som en
+            digital tjänst, från research till testad prototyp.
+          </p>
+        </div>
+        <div class="image-block primary">
+          <img src="assets/tassvakt-hero.png" alt="Omslagsbild från projektets introduktionsslide" />
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.1s">
+        <div class="text-block">
+          <h2>Överblick & kontext</h2>
+          <div class="meta">
+            <div>Projekt: TASSVAKT – digital tjänst för trygg hundpassning</div>
+            <div>Sammanhang: Skolprojekt inom UX-design</div>
+            <div>Tidsram: ca 2,5 månader</div>
+            <div>Team: 4 personer</div>
+            <div>Leverans: Interaktiv prototyp + användartester</div>
+          </div>
+          <p>
+            Projektets mål var att genomföra hela UX-designprocessen i praktiken –
+            från målgruppsanalys och användarintervjuer till prototyp och
+            användartestning.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.15s">
+        <div class="text-block">
+          <h2>Min roll & mitt fokus</h2>
+          <p>
+            Jag var involverad i samtliga delar av processen, med tyngdpunkt på
+            UX-research, analys och syntes.
+          </p>
+          <p>
+            Jag tog särskilt ansvar i analys- och syntesarbetet, där stora mängder
+            kvalitativ data behövde struktureras, prioriteras och översättas till
+            tydliga insikter och designriktning.
+          </p>
+          <p>Mitt ansvar:</p>
+          <ul>
+            <li>målgruppsanalys</li>
+            <li>planering och genomförande av användarintervjuer</li>
+            <li>analys och syntes</li>
+            <li>problemformulering</li>
+            <li>planering och analys av användartester</li>
+          </ul>
+          <p>
+            Mitt bidrag bestod främst av att strukturera information, identifiera
+            mönster och säkerställa att designbeslut baserades på
+            användarinsikter.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.2s">
+        <div class="text-block">
+          <h2>Utgångspunkt & problemområde</h2>
+          <p>
+            Bakgrunden var att många hundägare upplever osäkerhet kring att hitta
+            pålitlig hundpassning, särskilt utanför det egna nätverket.
+          </p>
+          <p>Tidiga antaganden:</p>
+          <ul>
+            <li>behov av tillgänglighet</li>
+            <li>idé om att hundägare kunde passa varandras hundar</li>
+          </ul>
+          <p>Dessa antaganden förändrades genom research.</p>
+          <p>
+            Projektet inleddes med antaganden som senare kom att både bekräftas
+            och utmanas genom kvalitativ research.
+          </p>
+        </div>
+        <div class="image-block narrow">
+          <img src="assets/tassvakt-problem.png" alt="Problemformulering från projektets presentation" />
+          <p class="caption">Exempel på hur problemområdet formulerades tidigt i projektet.</p>
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.25s">
+        <div class="text-block">
+          <h2>Research-upplägg</h2>
+          <p>
+            Vi genomförde kvalitativa intervjuer med hundägare i större svenska
+            städer.
+          </p>
+          <p>
+            Intervjuerna var en del av kursupplägget, men metoden visade sig också
+            vara särskilt lämplig då projektets fokus låg på att förstå
+            hundägares situation, oro och beslutsfattande snarare än att validera
+            färdiga lösningar.
+          </p>
+          <p>Metodval baserades på:</p>
+          <ul>
+            <li>öppna frågor</li>
+            <li>följdfrågor</li>
+            <li>djup förståelse</li>
+          </ul>
+          <p>Urval:</p>
+          <ul>
+            <li>4 intervjupersoner</li>
+            <li>kvinnor 20–45 år</li>
+            <li>begränsat urval (reflektion)</li>
+          </ul>
+          <p>
+            Urvalet gav tydliga mönster, men begränsade möjligheten att dra
+            bredare slutsatser kring kön, ålder och livssituation. Detta
+            påverkade hur generella insikterna kunde vara, men var tillräckligt
+            för att identifiera centrala behov och riskområden.
+          </p>
+        </div>
+        <div class="image-block supporting align-right">
+          <p class="caption top">Utdrag ur researchmaterial – visas som exempel, inte fullständig dokumentation.</p>
+          <img src="assets/tassvakt-research.png" alt="Researchinsikter med fokus på filtrering" />
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.3s">
+        <div class="text-block">
+          <h2>Centrala insikter</h2>
+          <p>
+            Behovet av trygghet och tillit visade sig vara mer centralt än
+            förväntat och hade en tydlig emotionell grund.
+          </p>
+          <p>
+            Matchning handlade inte om att erbjuda många val, utan om att hjälpa
+            användare att fatta trygga beslut genom relevanta kriterier och
+            filtrering som kognitiv avlastning.
+          </p>
+          <p>
+            Antagandet om att hundägare skulle kunna passa varandras hundar
+            saknade stöd i intervjuerna och övergavs tidigt.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.35s">
+        <div class="text-block">
+          <h2>Från insikt till tjänst</h2>
+          <p>
+            Problemet var ett förtroendeproblem snarare än ett gränssnittsproblem.
+          </p>
+          <p>
+            Utmaningen handlade inte enbart om UX i appen, utan om hur en digital
+            tjänst kan skapa förtroende mellan människor som inte känner varandra.
+          </p>
+          <p>Designbeslut:</p>
+          <ul>
+            <li>BankID-verifiering</li>
+            <li>kontaktförfrågningar</li>
+            <li>betygssystem</li>
+          </ul>
+          <p>Syftet var att skapa tillit i hela tjänsteekosystemet.</p>
+        </div>
+        <div class="image-block supporting align-right">
+          <img src="assets/tassvakt-trust.png" alt="Visuella element som stärker förtroende i tjänsten" />
+          <p class="caption">Exempel på hur förtroende översattes till tjänstefunktioner.</p>
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.4s">
+        <div class="text-block">
+          <h2>Lösning (översikt)</h2>
+          <p>
+            App som kopplar samman hundägare och hundvakter, fokuserar på
+            trygghet, enkelhet och personlighet och stödjer informerade beslut.
+          </p>
+        </div>
+        <div class="image-block supporting align-center">
+          <img src="assets/tassvakt-persona.png" alt="Persona som beskriver målgruppen" />
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.45s">
+        <div class="text-block">
+          <h2>Prototypens höjdpunkter</h2>
+          <p>
+            Prototyp med fokus på funktion och flöde snarare än visuell
+            perfektion.
+          </p>
+          <p>
+            Prototypen användes främst som ett verktyg för att testa hypoteser
+            och flöden, inte som en färdig produktdesign.
+          </p>
+        </div>
+        <div class="image-block supporting align-center">
+          <img src="assets/tassvakt-prototype.png" alt="Prototyp-exempel med filtrering och chatt" />
+          <p class="caption">Utvalda prototypvyer med fokus på trygghet och enkelhet.</p>
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.5s">
+        <div class="text-block">
+          <h2>Användartestning</h2>
+          <p>Två användartester genomfördes.</p>
+          <p>Syfte:</p>
+          <ul>
+            <li>testa centrala funktioner</li>
+            <li>hitta friktion</li>
+            <li>samla feedback</li>
+          </ul>
+          <p>
+            Tester genomfördes med personer som inte deltagit i intervjuerna,
+            för att minska risken att enbart bekräfta redan kända perspektiv.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.55s">
+        <div class="text-block">
+          <h2>Lärdomar från test</h2>
+          <ul>
+            <li>intuitivt för team ≠ intuitivt för användare</li>
+            <li>små detaljer påverkar mycket</li>
+            <li>research förändrar riktning</li>
+          </ul>
+          <p>
+            Ett tydligt exempel var hur en användare fastnade i ett oväntat
+            användarmönster trots att en enklare väg fanns, vilket tydliggjorde
+            hur designantaganden inte alltid delas av användare.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.6s">
+        <div class="text-block">
+          <h2>Vad projektet lärde mig om UX research i praktiken</h2>
+          <p>
+            Projektet fördjupade min förståelse för UX research som ett praktiskt
+            och iterativt arbete.
+          </p>
+          <p>
+            Framför allt blev det tydligt att:<br />
+            – research ofta utmanar även rimliga antaganden<br />
+            – kvalitativ data kräver aktiv analys och syntes för att bli användbar<br />
+            – användartester validerar lösningar, inte behov<br />
+            – tidig research sparar omfattande designarbete senare
+          </p>
+          <p>
+            Arbetet visade hur research, design och produktbeslut hänger tätt
+            samman och kontinuerligt påverkar varandra.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.65s">
+        <div class="text-block">
+          <h2>Reflektion & nästa steg</h2>
+          <p>
+            Projektet har tydliggjort hur UX research, design och produktbeslut
+            är tätt sammanflätade och sällan kan separeras i tydliga steg.
+          </p>
+          <p>
+            Att arbeta med research tidigt visade sig avgörande för att undvika
+            att lägga tid på lösningar som inte adresserar verkliga behov.
+            Samtidigt blev det tydligt att designbeslut ofta väcker nya frågor
+            som kräver ytterligare research.
+          </p>
+          <p>
+            Inför LIA vill jag fördjupa mig i hur UX research bedrivs i verkliga
+            organisatoriska sammanhang, med särskilt fokus på intervjuer, analys
+            av kvalitativ data och att omsätta insikter till hållbara beslut.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" style="--delay: 0.7s">
+        <div class="text-block">
+          <h2>Utvalda projektartefakter</h2>
+          <p>
+            Följande material är utdrag ur projektets dokumentation och visas som
+            kompletterande kontext.
+          </p>
+        </div>
+        <div class="thumb-grid">
+          <a href="assets/pages/page-02.png" target="_blank" rel="noopener">
+            <img src="assets/pages/page-02.png" alt="Projektartefakt: innehållsöversikt" />
+          </a>
+          <a href="assets/pages/page-03.png" target="_blank" rel="noopener">
+            <img src="assets/pages/page-03.png" alt="Projektartefakt: bakgrund och idé" />
+          </a>
+          <a href="assets/pages/page-04.png" target="_blank" rel="noopener">
+            <img src="assets/pages/page-04.png" alt="Projektartefakt: målgruppsanalys" />
+          </a>
+          <a href="assets/pages/page-05.png" target="_blank" rel="noopener">
+            <img src="assets/pages/page-05.png" alt="Projektartefakt: behov och önskemål" />
+          </a>
+          <a href="assets/pages/page-09.png" target="_blank" rel="noopener">
+            <img src="assets/pages/page-09.png" alt="Projektartefakt: kundresa" />
+          </a>
+          <a href="assets/pages/page-10.png" target="_blank" rel="noopener">
+            <img src="assets/pages/page-10.png" alt="Projektartefakt: målgruppens behov" />
+          </a>
+          <a href="assets/pages/page-13.png" target="_blank" rel="noopener">
+            <img src="assets/pages/page-13.png" alt="Projektartefakt: prototyp personlig" />
+          </a>
+          <a href="assets/pages/page-14.png" target="_blank" rel="noopener">
+            <img src="assets/pages/page-14.png" alt="Projektartefakt: användartest" />
+          </a>
+          <a href="assets/pages/page-15.png" target="_blank" rel="noopener">
+            <img src="assets/pages/page-15.png" alt="Projektartefakt: rekommendationer" />
+          </a>
+          <a href="assets/pages/page-16.png" target="_blank" rel="noopener">
+            <img src="assets/pages/page-16.png" alt="Projektartefakt: prioritering" />
+          </a>
+          <a href="assets/pages/page-17.png" target="_blank" rel="noopener">
+            <img src="assets/pages/page-17.png" alt="Projektartefakt: vägen framåt" />
+          </a>
+          <a href="assets/pages/page-18.png" target="_blank" rel="noopener">
+            <img src="assets/pages/page-18.png" alt="Projektartefakt: reflektion" />
+          </a>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
