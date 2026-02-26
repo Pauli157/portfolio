@@ -96,9 +96,12 @@
       }
 
       .nav {
+        font-weight: 500;
+      }
+
+      .desktop-nav {
         display: flex;
         gap: 18px;
-        font-weight: 500;
       }
 
       .nav a {
@@ -124,6 +127,68 @@
       .nav a:hover::after,
       .nav a[aria-current="page"]::after {
         transform: scaleX(1);
+      }
+
+      .mobile-menu {
+        display: none;
+        position: relative;
+      }
+
+      .mobile-menu summary {
+        list-style: none;
+        cursor: pointer;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-weight: 600;
+        background: #ffffff;
+        line-height: 1;
+      }
+
+      .mobile-menu summary::-webkit-details-marker {
+        display: none;
+      }
+
+      .mobile-menu summary::after {
+        content: "▾";
+        margin-left: 8px;
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+
+      .mobile-menu[open] summary::after {
+        content: "▴";
+      }
+
+      .mobile-menu-panel {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 10px);
+        min-width: 180px;
+        background: #ffffff;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        box-shadow: 0 10px 24px rgba(31, 31, 31, 0.12);
+        padding: 8px;
+      }
+
+      .mobile-menu-panel a {
+        display: block;
+        text-decoration: none;
+        color: var(--ink);
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-weight: 500;
+      }
+
+      .mobile-menu-panel a:hover {
+        background: var(--accent-soft);
+        color: var(--accent);
+      }
+
+      .mobile-menu-panel a:focus-visible {
+        outline: 2px solid rgba(15, 107, 95, 0.35);
+        outline-offset: 2px;
       }
 
       .section {
@@ -499,13 +564,50 @@
       }
 
       @media (max-width: 720px) {
-        .nav {
-          flex-wrap: wrap;
-          gap: 12px;
+        .topbar {
+          padding: 12px 0;
+        }
+
+        .topbar-inner {
+          padding: 0 18px;
+        }
+
+        .brand {
+          font-size: 0.78rem;
+          letter-spacing: 0.14em;
+        }
+
+        .desktop-nav {
+          display: none;
+        }
+
+        .mobile-menu {
+          display: block;
         }
 
         .section {
           padding: 56px 0;
+        }
+
+        .section + .section {
+          margin-top: 12px;
+        }
+
+        .topbar + .section {
+          margin-top: 10px;
+        }
+
+        .hero {
+          gap: 24px;
+        }
+
+        .hero-image img {
+          max-height: 360px;
+          object-fit: cover;
+        }
+
+        .scroll-indicator {
+          display: none;
         }
       }
     </style>
@@ -515,12 +617,21 @@
       <header class="topbar">
         <div class="topbar-inner">
           <div class="brand">Pauli Saari</div>
-          <nav class="nav" aria-label="Huvudmeny">
+          <nav class="nav desktop-nav" aria-label="Huvudmeny">
             <a href="#top" aria-current="page">Hem</a>
             <a href="#projekt">Projekt</a>
             <a href="#om-mig">Om mig</a>
             <a href="#kontakt">Kontakt</a>
           </nav>
+          <details class="mobile-menu">
+            <summary>Meny</summary>
+            <nav class="mobile-menu-panel" aria-label="Mobilmeny">
+              <a href="#top" aria-current="page">Hem</a>
+              <a href="#projekt">Projekt</a>
+              <a href="#om-mig">Om mig</a>
+              <a href="#kontakt">Kontakt</a>
+            </nav>
+          </details>
         </div>
       </header>
 
