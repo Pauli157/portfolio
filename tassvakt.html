@@ -400,11 +400,15 @@
 
       .lightbox-btn,
       .lightbox-close {
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.26);
+        background: #0d0e10;
         color: #ffffff;
         cursor: pointer;
-        backdrop-filter: blur(4px);
+        box-shadow:
+          0 12px 28px rgba(0, 0, 0, 0.38),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+        -webkit-appearance: none;
+        appearance: none;
       }
 
       .lightbox-btn {
@@ -412,9 +416,32 @@
         height: 48px;
         border-radius: 999px;
         font-size: 1.4rem;
+        font-weight: 700;
+        line-height: 1;
+        padding: 0;
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        position: relative;
+      }
+
+      .lightbox-btn::before {
+        content: "";
+        width: 12px;
+        height: 12px;
+        border-top: 3px solid #ffffff;
+        border-right: 3px solid #ffffff;
+        display: block;
+      }
+
+      .lightbox-btn.prev::before {
+        transform: rotate(-135deg);
+        margin-left: 4px;
+      }
+
+      .lightbox-btn.next::before {
+        transform: rotate(45deg);
+        margin-right: 4px;
       }
 
       .lightbox-close {
@@ -432,7 +459,7 @@
 
       .lightbox-btn:hover,
       .lightbox-close:hover {
-        background: rgba(255, 255, 255, 0.18);
+        background: #07080a;
       }
 
       .lightbox-btn:focus-visible,
@@ -504,6 +531,8 @@
           top: 50%;
           transform: translateY(-50%);
           z-index: 1;
+          width: 52px;
+          height: 52px;
         }
 
         .lightbox-btn.prev {
@@ -873,7 +902,7 @@
 
       <div class="lightbox" id="artefact-lightbox" aria-hidden="true">
         <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="Projektartefakt">
-          <button class="lightbox-btn prev" type="button" aria-label="Föregående bild">‹</button>
+          <button class="lightbox-btn prev" type="button" aria-label="Föregående bild"></button>
           <div class="lightbox-frame">
             <button class="lightbox-close" type="button" aria-label="Stäng bildvisare">×</button>
             <figure class="lightbox-figure">
@@ -884,7 +913,7 @@
               </figcaption>
             </figure>
           </div>
-          <button class="lightbox-btn next" type="button" aria-label="Nästa bild">›</button>
+          <button class="lightbox-btn next" type="button" aria-label="Nästa bild"></button>
         </div>
       </div>
     </div>
